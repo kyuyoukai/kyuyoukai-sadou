@@ -18,6 +18,14 @@
 </head>
 <body>
 
+  <script>
+    var pass = prompt("会員専用パスワードを入力してください：");
+    if (pass !== "sadou123") {
+      alert("パスワードが正しくありません。");
+      window.location.href = "index.html";
+    }
+  </script>
+
   <header>
     <h1>表千家流 茶道教室</h1>
     <p style="margin:0.5rem 0 0 0; font-size:0.9rem;">【会員専用エリア】</p>
