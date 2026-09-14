@@ -1,0 +1,19 @@
+backend:
+  name: github
+  repo: kyuyoukai/kyuyoukai-sadou
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "blog"
+    label: "ブログ記事"
+    folder: "blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "タイトル", name: "title", widget: "string" }
+      - { label: "投稿日", name: "date", widget: "datetime" }
+      - { label: "アイキャッチ画像（写真）", name: "thumbnail", widget: "image", required: false }
+      - { label: "本文", name: "body", widget: "markdown" }
