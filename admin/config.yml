@@ -2,8 +2,8 @@ backend:
   name: github
   repo: kyuyoukai/kyuyoukai-sadou
   branch: main
-  base_url: https://decap-cms-oauth.netlify.app
-  auth_endpoint: .netlify/functions/auth
+  base_url: https://kyuyoukai-sadou.pages.dev
+  auth_endpoint: api/auth
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
