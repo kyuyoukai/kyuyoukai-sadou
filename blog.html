@@ -9,9 +9,10 @@
         header { background-color: #2b4b32; color: #fff; text-align: center; padding: 1.5rem 1rem; }
         h1 { margin: 0; font-size: 1.5rem; letter-spacing: 0.1em; }
         .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
-        .article { background: #fff; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .article { background: #fff; padding: 2rem; margin-bottom: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .date { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
-        h2 { color: #2b4b32; font-size: 1.3rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        h2 { color: #2b4b32; font-size: 1.4rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        .article img { max-width: 100%; height: auto; border-radius: 4px; margin: 1rem 0; }
         .btn-back { display: inline-block; background-color: #666; color: #fff; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 4px; margin-top: 1rem; }
     </style>
 </head>
@@ -24,16 +25,87 @@
 
     <div class="container">
         <div id="blog-list">
-            <!-- 記事ここに自動で表示されます -->
-            <article class="article">
-                <div class="date">2026-09-16</div>
-                <h2>9月 特別稽古</h2>
-                <p>先日の特別稽古の様子です。皆様熱心に励んでいらっしゃいました。</p>
-            </article>
+            <p>記事を読み込んでいます...</p>
         </div>
 
         <a href="index.html" class="btn-back">トップページに戻る</a>
     </div>
 
+    <!-- Markdown変換用ライブラリ -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
+    <script>
+        const repoOwner = 'kyuyoukai';
+        const repoName = 'kyuyoukai-sadou';
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/blog`;
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) throw new Error('API制限または通信エラー');
+                return response.json();
+            })
+            .then(async files => {
+                const blogList = document.getElementById('blog-list');
+                const mdFiles = files.filter(file => file.name.endsWith('.md'));
+                
+                if (mdFiles.length === 0) {
+                    blogList.innerHTML = '<p>まだブログ記事がありません。</p>';
+                    return;
+                }
+
+                mdFiles.sort((a, b) => b.name.localeCompare(a.name));
+
+                const articlePromises = mdFiles.map(async file => {
+                    const res = await fetch(file.download_url);
+                    const content = await res.text();
+                    
+                    const parts = content.split('---');
+                    if (parts.length >= 3) {
+                        const frontMatter = parts[1];
+                        const bodyMarkdown = parts.slice(2).join('---');
+                        
+                        const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
+                        const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
+                        const thumbMatch = frontMatter.match(/thumbnail:\s*["']?([^"'\n]+)["']?/);
+                        
+                        const title = titleMatch ? titleMatch[1] : '無題';
+                        const date = dateMatch ? dateMatch[1].split('T')[0] : '';
+                        const thumbnail = thumbMatch ? thumbMatch[1].trim() : '';
+                        
+                        let htmlBody = marked.parse(bodyMarkdown);
+                        
+                        // サムネイル画像がある場合は本文の先頭（またはタイトル下）に挿入
+                        let imgHtml = '';
+                        if (thumbnail) {
+                            imgHtml = `<img src="${thumbnail}" alt="${title}">`;
+                        }
+                        
+                        return `
+                            <div class="article">
+                                <div class="date">${date}</div>
+                                <h2>${title}</h2>
+                                ${imgHtml}
+                                <div>${htmlBody}</div>
+                            </div>
+                        `;
+                    }
+                    return '';
+                });
+
+                const articlesHtml = await Promise.all(articlePromises);
+                blogList.innerHTML = articlesHtml.join('') || '<p>記事の表示に失敗しました。</p>';
+            })
+            .catch(err => {
+                console.error(err);
+                // 万が一API制限等で失敗した場合のフォールバック表示
+                document.getElementById('blog-list').innerHTML = `
+                    <div class="article">
+                        <div class="date">2026-09-17</div>
+                        <h2>9月 特別稽古</h2>
+                        <img src="images/uploads/img_6182.jpeg" alt="9月 特別稽古">
+                        <p>且座で花をいけてもらいました。</p>
+                    </div>
+                `;
+            });
+    </script>
 </body>
 </html>
