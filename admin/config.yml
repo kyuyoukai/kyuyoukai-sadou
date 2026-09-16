@@ -2,8 +2,9 @@ backend:
   name: github
   repo: kyuyoukai/kyuyoukai-sadou
   branch: main
+  base_url: https://kyuyoukai-sadou.pages.dev
+  auth_endpoint: api/authmedia_folder: "images/uploads"
 
-media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
 collections:
