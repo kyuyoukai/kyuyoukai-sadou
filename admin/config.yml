@@ -4,7 +4,8 @@ backend:
   branch: main
   base_url: https://decap-cms-oauth.netlify.app
   auth_endpoint: .netlify/functions/auth
-  media_folder: "images/uploads"
+
+media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
 collections:
@@ -16,5 +17,5 @@ collections:
     fields:
       - { label: "タイトル", name: "title", widget: "string" }
       - { label: "投稿日", name: "date", widget: "datetime" }
-      - { label: "アイキャッチ画像（写真）", name: "thumbnail", widget: "image", required: false }
+      - { label: "アイキャッチ画像 (写真)", name: "thumbnail", widget: "image", required: false }
       - { label: "本文", name: "body", widget: "markdown" }
