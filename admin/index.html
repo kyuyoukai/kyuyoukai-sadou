@@ -1,12 +1,42 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>管理画面 | 表千家流 茶道教室</title>
-   </head>
-  <body>
-    <!-- Decap CMS の読み込み -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  </body>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理画面 | 表千家流 茶道教室</title>
+</head>
+<body>
+  <!-- GitHub認証の設定 -->
+  <script>
+    window.CMS_MANUAL_INIT = true;
+  </script>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'kyuyoukai/kyuyoukai-sadou',
+          branch: 'main',
+          base_url: 'https://kyuyoukai-sadou.pages.dev',
+          auth_endpoint: 'api/auth'
+        },
+        media_folder: 'images',
+        public_folder: '/images',
+        collections: [
+          {
+            name: 'blog',
+            label: 'ブログ',
+            folder: 'blog',
+            create: true,
+            fields: [
+              { name: 'title', label: 'タイトル', widget: 'string' },
+              { name: 'body', label: '本文', widget: 'markdown' }
+            ]
+          }
+        ]
+      }
+    });
+  </script>
+</body>
 </html>
