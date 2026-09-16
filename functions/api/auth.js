@@ -5,8 +5,8 @@ export async function onRequestGet(context) {
     const code = url.searchParams.get("code");
 
     // ★ここに直接書き込みます
-    const clientId = "ここにClient_IDを入れる";
-    const clientSecret = "ここに新しいClient_Secretを入れる";
+    const clientId = "Ov23liKW8oXeJWBOQ4wG";
+    const clientSecret = "62a6334dd828ef937fc81a58500c3100561431e1";
 
     if (!code) {
       return Response.redirect(`https://github.com/login/oauth/authorize?client_id=${clientId}`, 302);
