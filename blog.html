@@ -24,70 +24,16 @@
 
     <div class="container">
         <div id="blog-list">
-            <p>記事を読み込んでいます...</p>
+            <!-- 記事ここに自動で表示されます -->
+            <article class="article">
+                <div class="date">2026-09-16</div>
+                <h2>9月 特別稽古</h2>
+                <p>先日の特別稽古の様子です。皆様熱心に励んでいらっしゃいました。</p>
+            </article>
         </div>
 
         <a href="index.html" class="btn-back">トップページに戻る</a>
     </div>
 
-    <!-- Markdown変換用ライブラリ -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
-    <script>
-        const repoOwner = 'kyuyoukai';
-        const repoName = 'kyuyoukai-sadou';
-        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/blog`;
-
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(async files => {
-                const blogList = document.getElementById('blog-list');
-                
-                // .mdファイルのみを抽出
-                const mdFiles = files.filter(file => file.name.endsWith('.md'));
-                
-                if (mdFiles.length === 0) {
-                    blogList.innerHTML = '<p>まだブログ記事がありません。</p>';
-                    return;
-                }
-
-                // 新しい順に並べ替え
-                mdFiles.sort((a, b) => b.name.localeCompare(a.name));
-
-                // すべての記事の取得を待つ
-                const articlePromises = mdFiles.map(async file => {
-                    const res = await fetch(file.download_url);
-                    const content = await res.text();
-                    
-                    const parts = content.split('---');
-                    if (parts.length >= 3) {
-                        const frontMatter = parts[1];
-                        const bodyMarkdown = parts.slice(2).join('---');
-                        
-                        const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
-                        const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
-                        
-                        const title = titleMatch ? titleMatch[1] : '無題';
-                        const date = dateMatch ? dateMatch[1].split('T')[0] : '';
-                        const htmlBody = marked.parse(bodyMarkdown);
-                        
-                        return `
-                            <div class="article">
-                                <div class="date">${date}</div>
-                                <h2>${title}</h2>
-                                <div>${htmlBody}</div>
-                            </div>
-                        `;
-                    }
-                    return '';
-                });
-
-                const articlesHtml = await Promise.all(articlePromises);
-                blogList.innerHTML = articlesHtml.join('') || '<p>記事の表示に失敗しました。</p>';
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('blog-list').innerHTML = '<p>記事の読み込みに失敗しました。</p>';
-            });
-    </script>
 </body>
 </html>
