@@ -1,39 +1,94 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>お稽古ブログ | 表千家流 茶道教室</title>
-  <style>
-    body { font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; margin: 0; padding: 0; background-color: #fcfcf9; color: #333; line-height: 1.8; }
-    header { background-color: #2b4b32; color: #fff; text-align: center; padding: 1.5rem 1rem; }
-    h1 { margin: 0; font-size: 1.5rem; letter-spacing: 0.1em; }
-    .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
-    .article { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 3px solid #2b4b32; }
-    .date { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
-    h2 { color: #2b4b32; font-size: 1.3rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
-    .btn-back { display: inline-block; background-color: #666; color: #fff; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 4px; margin-top: 1rem; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お稽古ブログ | 表千家流 茶道教室</title>
+    <style>
+        body { font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; margin: 0; padding: 0; background-color: #faf7f3; color: #333; }
+        header { background-color: #2b4b32; color: #fff; text-align: center; padding: 1.5rem 1rem; }
+        h1 { margin: 0; font-size: 1.5rem; letter-spacing: 0.1em; }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+        .article { background: #fff; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .date { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        h2 { color: #2b4b32; font-size: 1.3rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        .btn-back { display: inline-block; background-color: #666; color: #fff; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 4px; margin-top: 1rem; }
+    </style>
+    <!-- Netlify Identity Widget（認証用） -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 
-  <header>
-    <h1>表千家流 茶道教室</h1>
-    <p style="margin:0.5rem 0 0 0; font-size:0.9rem;">お稽古ブログ・便り</p>
-  </header>
+    <header>
+        <h1>表千家流 茶道教室</h1>
+        <p style="margin:0.5rem 0 0 0; font-size:0.9rem;">お稽古ブログ・便り</p>
+    </header>
 
-  <div class="container">
+    <div class="container">
+        <!-- 記事が自動でここに読み込まれます -->
+        <div id="blog-list">
+            <p>記事を読み込んでいます...</p>
+        </div>
 
-    <!-- 記事1つ目（今後増やす時はここから...） -->
-    <div class="article">
-      <div class="date">2026.09.15</div>
-      <h2>ブログを開設いたしました</h2>
-      <p>お稽古の様子や季節のお花、お菓子について少しずつ発信してまいります。</p>
+        <a href="index.html" class="btn-back">トップページに戻る</a>
     </div>
-    <!-- ...ここまでをコピーして上に挿入していきます -->
 
-    <a href="index.html" class="btn-back">← トップページに戻る</a>
-  </div>
-
+    <!-- 簡易的なMarkdown読み込みスクリプト -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
+    <script>
+        // GitHub APIまたはNetlifyのassets経由でブログ記事一覧を取得して表示する処理
+        // ※NetlifyのGit Gateway経由でblogフォルダのファイル一覧を取得します
+        fetch('/blog/')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'));
+                
+                // .mdファイルを抽出
+                const mdFiles = links.map(a => a.href).filter(href => href.endsWith('.md'));
+                
+                const blogList = document.getElementById('blog-list');
+                if (mdFiles.length === 0) {
+                    blogList.innerHTML = '<p>まだブログ記事がありません。</p>';
+                    return;
+                }
+                
+                blogList.innerHTML = '';
+                mdFiles.reverse().forEach(fileUrl => {
+                    fetch(fileUrl)
+                        .then(res => res.text())
+                        .then(content => {
+                            // Front Matter (YAML) と本文を簡易分解
+                            const parts = content.split('---');
+                            if (parts.length >= 3) {
+                                const frontMatter = parts[1];
+                                const bodyMarkdown = parts.slice(2).join('---');
+                                
+                                // タイトルと日付の抽出
+                                const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
+                                const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
+                                
+                                const title = titleMatch ? titleMatch.1 : '無題';
+                                const date = dateMatch ? dateMatch.1.split('T')[0] : '';
+                                
+                                const htmlBody = marked.parse(bodyMarkdown);
+                                
+                                const articleDiv = document.createElement('div');
+                                articleDiv.className = 'article';
+                                articleDiv.innerHTML = `
+                                    <div class="date">${date}</div>
+                                    <h2>${title}</h2>
+                                    <div>${htmlBody}</div>
+                                `;
+                                blogList.appendChild(articleDiv);
+                            }
+                        });
+                });
+            })
+            .catch(err => {
+                document.getElementById('blog-list').innerHTML = '<p>記事の読み込みに失敗しました。</p>';
+            });
+    </script>
 </body>
 </html>
