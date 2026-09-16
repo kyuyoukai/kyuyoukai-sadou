@@ -6,7 +6,7 @@ export async function onRequestGet(context) {
 
     // テスト用のハードコード（必要に応じて維持）
     const clientId = "Ov23liKW8oXeJWBOQ4wG";
-    const clientSecret = "62a6334dd828e937fc81a58500c3100561431e1";
+    const clientSecret = "62a6334dd828ef937fc81a58500c3100561431e1";
 
     if (!code) {
       return Response.redirect(`https://github.com/login/oauth/authorize?client_id=${clientId}`, 302);
