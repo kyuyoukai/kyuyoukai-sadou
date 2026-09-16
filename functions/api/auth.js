@@ -7,9 +7,9 @@ export async function onRequestGet(context) {
   if (!code) {
     const clientId = env.GITHUB_CLIENT_ID || env.OAUTH_CLIENT_ID;
     if (!clientId) {
-      return new Response("GitHub Client ID is not configured in environment variables.", { status: 500 });
+      return new Response("GitHub Client ID is not configured in environment variables.");
     }
-    const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo,user`;
+    const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
     return Response.redirect(githubAuthUrl, 302);
   }
 
@@ -18,7 +18,7 @@ export async function onRequestGet(context) {
   const clientSecret = env.GITHUB_CLIENT_SECRET || env.OAUTH_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
-    return new Response("GitHub Client ID or Secret is missing in environment variables.", { status: 500 });
+    return new Response("GitHub Client ID or Secret is missing in environment variables");
   }
 
   const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
@@ -38,40 +38,33 @@ export async function onRequestGet(context) {
   const tokenData = await tokenResponse.json();
 
   if (tokenData.error) {
-    return new Response(`Error from GitHub: ${tokenData.error_description || tokenData.error}`, { status: 400 });
+    return new Response(`Error from GitHub: ${tokenData.error_description || tokenData.error}`);
   }
 
   const token = tokenData.access_token;
-  const provider = "github";
 
-  // 3. 取得したトークンをDecap CMSに渡すためのHTMLレスポンスを返す
-  const script = `
-    <script>
-      (function() {
-        function receiveMessage(e) {
-          console.log("receiveMessage", e);
+  // 3. 取得したトークンをDecap CMSに渡すHTMLを返す
+  const body = `
+    <!doctype html>
+    <html>
+    <body>
+      <script>
+        const receiveMessage = (message) => {
           window.opener.postMessage(
-            'authorization:${provider}:success:${JSON.stringify({ token, provider })}',
-            e.origin
+            'authorization:github:success:' + JSON.stringify({ token: "${token}", provider: "github" }),
+            message.origin
           );
-          window.removeEventListener("message", receiveMessage, false);
-        }
+        };
         window.addEventListener("message", receiveMessage, false);
-        
-        if (window.opener) {
-          window.opener.postMessage('authorization:${provider}:success:${JSON.stringify({ token, provider })}', "*");
-        }
-        
-        // 少し待ってからポップアップ（またはウィンドウ）を閉じる
-        setTimeout(function() {
-          window.close();
-        }, 1000);
-      })();
-    </script>
-    <p>認証に成功しました。このウィンドウはまもなく閉じます...</p>
+        window.opener.postMessage('authorization:github:success:' + JSON.stringify({ token: "${token}", provider: "github" }), "*");
+        setTimeout(() => { window.close(); }, 1000);
+      </script>
+      <p>認証に成功しました。このウィンドウはまもなく閉じます...</p>
+    </body>
+    </html>
   `;
 
-  return new Response(script, {
+  return new Response(body, {
     headers: {
       "content-type": "text/html;charset=UTF-8",
     },
