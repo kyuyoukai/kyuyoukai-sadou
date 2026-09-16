@@ -33,14 +33,13 @@
     <!-- Markdown変換用ライブラリ -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
     <script>
-        // GitHub APIを使って repository の blog フォルダ内ファイル一覧を取得
         const repoOwner = 'kyuyoukai';
         const repoName = 'kyuyoukai-sadou';
         const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/blog`;
 
         fetch(apiUrl)
             .then(response => response.json())
-            .then(files => {
+            .then(async files => {
                 const blogList = document.getElementById('blog-list');
                 
                 // .mdファイルのみを抽出
@@ -51,41 +50,39 @@
                     return;
                 }
 
-                // ファイル名の新しい順（あるいは逆順）に並べ替え
+                // 新しい順に並べ替え
                 mdFiles.sort((a, b) => b.name.localeCompare(a.name));
 
-                blogList.innerHTML = '';
-
-                mdFiles.forEach(file => {
-                    fetch(file.download_url)
-                        .then(res => res.text())
-                        .then(content => {
-                            // Front Matter (YAML) と本文の分割
-                            const parts = content.split('---');
-                            if (parts.length >= 3) {
-                                const frontMatter = parts[1];
-                                const bodyMarkdown = parts.slice(2).join('---');
-                                
-                                // タイトルと日付の抽出
-                                const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
-                                const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
-                                
-                                const title = titleMatch ? titleMatch[1] : '無題';
-                                const date = dateMatch ? dateMatch[1].split('T')[0] : '';
-                                
-                                const htmlBody = marked.parse(bodyMarkdown);
-                                
-                                const articleDiv = document.createElement('div');
-                                articleDiv.className = 'article';
-                                articleDiv.innerHTML = `
-                                    <div class="date">${date}</div>
-                                    <h2>${title}</h2>
-                                    <div>${htmlBody}</div>
-                                `;
-                                blogList.appendChild(articleDiv);
-                            }
-                        });
+                // すべての記事の取得を待つ
+                const articlePromises = mdFiles.map(async file => {
+                    const res = await fetch(file.download_url);
+                    const content = await res.text();
+                    
+                    const parts = content.split('---');
+                    if (parts.length >= 3) {
+                        const frontMatter = parts[1];
+                        const bodyMarkdown = parts.slice(2).join('---');
+                        
+                        const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
+                        const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
+                        
+                        const title = titleMatch ? titleMatch[1] : '無題';
+                        const date = dateMatch ? dateMatch[1].split('T')[0] : '';
+                        const htmlBody = marked.parse(bodyMarkdown);
+                        
+                        return `
+                            <div class="article">
+                                <div class="date">${date}</div>
+                                h2>${title}</h2>
+                                <div>${htmlBody}</div>
+                            </div>
+                        `;
+                    }
+                    return '';
                 });
+
+                const articlesHtml = await Promise.all(articlePromises);
+                blogList.innerHTML = articlesHtml.join('') || '<p>記事の表示に失敗しました。</p>';
             })
             .catch(err => {
                 console.error(err);
