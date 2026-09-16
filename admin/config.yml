@@ -1,9 +1,6 @@
 backend:
-  name: github
-  repo: kyuyoukai/kyuyoukai-sadou
+  name: git-gateway
   branch: main
-  base_url: https://kyuyoukai-sadou.pages.dev
-  auth_endpoint: api/auth
   
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
