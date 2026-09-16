@@ -14,8 +14,6 @@
         h2 { color: #2b4b32; font-size: 1.3rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
         .btn-back { display: inline-block; background-color: #666; color: #fff; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 4px; margin-top: 1rem; }
     </style>
-    <!-- Netlify Identity Widget（認証用） -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 
@@ -25,7 +23,6 @@
     </header>
 
     <div class="container">
-        <!-- 記事が自動でここに読み込まれます -->
         <div id="blog-list">
             <p>記事を読み込んでいます...</p>
         </div>
@@ -33,33 +30,37 @@
         <a href="index.html" class="btn-back">トップページに戻る</a>
     </div>
 
-    <!-- 簡易的なMarkdown読み込みスクリプト -->
+    <!-- Markdown変換用ライブラリ -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
     <script>
-        // GitHub APIまたはNetlifyのassets経由でブログ記事一覧を取得して表示する処理
-        // ※NetlifyのGit Gateway経由でblogフォルダのファイル一覧を取得します
-        fetch('/blog/')
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'));
-                
-                // .mdファイルを抽出
-                const mdFiles = links.map(a => a.href).filter(href => href.endsWith('.md'));
-                
+        // GitHub APIを使って repository の blog フォルダ内ファイル一覧を取得
+        const repoOwner = 'kyuyoukai';
+        const repoName = 'kyuyoukai-sadou';
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/blog`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(files => {
                 const blogList = document.getElementById('blog-list');
+                
+                // .mdファイルのみを抽出
+                const mdFiles = files.filter(file => file.name.endsWith('.md'));
+                
                 if (mdFiles.length === 0) {
                     blogList.innerHTML = '<p>まだブログ記事がありません。</p>';
                     return;
                 }
-                
+
+                // ファイル名の新しい順（あるいは逆順）に並べ替え
+                mdFiles.sort((a, b) => b.name.localeCompare(a.name));
+
                 blogList.innerHTML = '';
-                mdFiles.reverse().forEach(fileUrl => {
-                    fetch(fileUrl)
+
+                mdFiles.forEach(file => {
+                    fetch(file.download_url)
                         .then(res => res.text())
                         .then(content => {
-                            // Front Matter (YAML) と本文を簡易分解
+                            // Front Matter (YAML) と本文の分割
                             const parts = content.split('---');
                             if (parts.length >= 3) {
                                 const frontMatter = parts[1];
@@ -69,8 +70,8 @@
                                 const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
                                 const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
                                 
-                                const title = titleMatch ? titleMatch.1 : '無題';
-                                const date = dateMatch ? dateMatch.1.split('T')[0] : '';
+                                const title = titleMatch ? titleMatch[1] : '無題';
+                                const date = dateMatch ? dateMatch[1].split('T')[0] : '';
                                 
                                 const htmlBody = marked.parse(bodyMarkdown);
                                 
@@ -87,6 +88,7 @@
                 });
             })
             .catch(err => {
+                console.error(err);
                 document.getElementById('blog-list').innerHTML = '<p>記事の読み込みに失敗しました。</p>';
             });
     </script>
