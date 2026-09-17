@@ -1,104 +1,24 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>表千家流 茶道教室</title>
-  <style>
-    /* 基本デザイン（抹茶色・生成りを基調とした落ち着いたデザイン） */
-    body { font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; margin: 0; padding: 0; background-color: #fdfbf7; color: #333; line-height: 1.8; }
-    header { background-color: #2b4b32; color: #fff; padding: 1.5rem 1rem; text-align: center; }
-    header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.1em; }
-    nav { background-color: #1e3624; text-align: center; padding: 0.8rem 0.5rem; }
-    nav a { color: #fff; text-decoration: none; margin: 0 10px; font-size: 0.9rem; display: inline-block; white-space: nowrap; }    .hero { background-color: #e2e8df; text-align: center; padding: 3rem 1rem; border-bottom: 3px double #2b4b32; }
-    .hero h2 { color: #2b4b32; font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
-    section { margin-bottom: 2.5rem; background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-    h3 { color: #2b4b32; border-bottom: 2px solid #2b4b32; padding-bottom: 0.3rem; margin-top: 0; }
-    ul { padding-left: 1.2rem; }
-    .btn { display: inline-block; background-color: #2b4b32; color: #fff; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 1rem; }
-    footer { text-align: center; padding: 1.5rem; background-color: #2b4b32; color: #fff; font-size: 0.8rem; margin-top: 2rem; }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理画面 | 京都 表千家 茶道教室 久洋会</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-
-  <header>
-    <h1>表千家流 茶道教室</h1>
-    <p>〜 静寂の中で、一服のお茶を楽しむ 〜</p>
-  </header>
-
-  <nav>
-    <a href="#class">お稽古案内</a>
-    <a href="#news">お知らせ</a>
-    <a href="#blog">ブログ</a>
-    <a href="#contact">お問合せ</a>
-    <a href="#member" style="color: #ffd700; font-weight: bold;">【会員専用】</a>
-  </nav>
-
-  <div class="hero">
-    <h2>日常生活に和のひとときを</h2>
-    <p>初心者の方から経験者の方まで、一から丁寧にお稽古いたします。</p>
-  </div>
-
-  <div class="container">
-    
-    <section id="about">
-      <h3>ご挨拶・講師プロフィール</h3>
-      <p>当教室では、伝統ある表千家の茶道を通じて、お稽古の技術だけでなく、四季の移ろいやおもてなしの心を大切にしております。</p>
-      <p><strong>講師：</strong> ○○ 宗○（表千家教授）</p>
-    </section>
-
-    <section id="class">
-      <h3>お稽古のご案内</h3>
-      <p>ライフスタイルに合わせて通っていただけるよう、3つのクラスと4つの時間帯をご用意しております。</p>
-      <h4>■ クラス（全3クラス）</h4>
-      <ul>
-        <li><strong>初心者クラス：</strong> 割り稽古・割稽古から割稽古・基本的な立ち居振る舞いを学びます。</li>
-        <li><strong>中級クラス：</strong> 置き付け・小習い・各種点前を中心に磨きます。</li>
-        <li><strong>上級クラス：</strong> 四箇ノ冊・奥秘のお稽古を行います。</li>
-      </ul>
-      <h4>■ 時間帯（全4枠）</h4>
-      <ul>
-        <li>① 火曜 午前（10:00〜12:00）</li>
-        <li>② 火曜 午後（14:00〜16:00）</li>
-        <li>③ 木曜 夜間（18:30〜20:30）</li>
-        <li>④ 土曜 午前（10:00〜12:00）</li>
-      </ul>
-      <p>※お稽古の回数・月謝の詳細については、以下のお問合せよりご案内いたします。</p>
-    </section>
-
-    <section id="news">
-      <h3>お知らせ・茶会情報</h3>
-      <ul>
-        <li>2026.09.01 初秋の口切り茶会のご案内</li>
-        <li>2026.08.15 体験稽古の受講生を募集しております</li>
-      </ul>
-    </section>
-    
-　<section id="blog">
-  　<h3>お稽古ブログ</h3>
-  　<p>教室の日々の様子や季節のお茶について綴っています。</p>
-  　<a href="blog.html" class="btn">最新のブログ記事一覧を見る</a>
-　</section> 
-    
-    <section id="contact">
-      <h3>見学・体験稽古のお問合せ</h3>
-      <p>月謝やお稽古の日程についてのお問合せ、見学・体験のご予約は下記よりご連絡ください。</p>
-      <a href="mailto:kyuyoukai.sadou@gmail.com?subject=【表千家流茶道教室】お稽古のお申込み・お問い合わせ&body=【お名前】%0D%0A%0D%0A【お電話番号】%0D%0A%0D%0A【お問い合わせ・ご希望の日時など】%0D%0A%0D%0A--------------------------------%0D%0A※上記項目をご記入の上、送信してください。" class="btn">メールでお問合せする</a>
-    </section>
-
-    <section id="member" style="border: 2px solid #2b4b32; background-color: #f4f7f3;">
-      <h3>【会員限定】お稽古生専用ページ</h3>
-      <p>会員専用ページでは、今月のお稽古日カレンダーや振替のお申込みが可能です。</p>
-      <p>※会員用パスワードをお持ちの方のみ閲覧いただけます。</p>
-       <a href="kaiin.html" class="btn">会員ページへログイン</a>
-    </section>
-
-  </div>
-
-  <footer>
-    <p>&copy; 表千家流 茶道教室 All Rights Reserved.</p>
-  </footer>
-
+  <!-- Decap CMS本体 -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>

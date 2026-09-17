@@ -3,21 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>会員専用ページ | 表千家流 茶道教室</title>
-  <style>
-    body { font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; margin: 0; padding: 0; background-color: #fcfcf9; color: #333; line-height: 1.8; }
-    header { background-color: #2b4b32; color: #fff; text-align: center; padding: 1.5rem 1rem; }
-    h1 { margin: 0; font-size: 1.5rem; letter-spacing: 0.1em; }
-    .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
-    .card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 3px solid #2b4b32; }
-    h2 { color: #2b4b32; font-size: 1.2rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; margin-top: 0; }
-    ul { padding-left: 1.2rem; }
-    li { margin-bottom: 0.5rem; }
-    .btn-back { display: inline-block; background-color: #666; color: #fff; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 4px; margin-top: 1rem; }
-  </style>
+  <title>会員専用ページ | 京都 表千家 茶道教室 久洋会</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-
   <script>
     var pass = prompt("会員専用パスワードを入力してください：");
     if (pass !== "sadou123") {
@@ -26,28 +18,49 @@
     }
   </script>
 
-  <header>
-    <h1>表千家流 茶道教室</h1>
-    <p style="margin:0.5rem 0 0 0; font-size:0.9rem;">【会員専用エリア】</p>
+  <header class="site-header theme-light">
+    <a class="logo" href="index.html">
+      <strong>久洋会</strong>
+      <span>京都 表千家 茶道教室</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="メニュー" aria-expanded="false"><span></span></button>
+    <nav class="nav">
+      <a href="index.html#about">ご挨拶</a>
+      <a href="index.html#class">お稽古案内</a>
+      <a href="blog.html">ブログ</a>
+      <a href="index.html#contact">お問合せ</a>
+      <a class="member" href="kaiin.html">会員専用</a>
+    </nav>
   </header>
 
-  <div class="container">
-    <div class="card">
-      <h2>今月のお稽古日程</h2>
+  <div class="page-hero">
+    <div class="wrap reveal">
+      <span class="kicker">Members</span>
+      <h1>会員専用エリア</h1>
+      <p class="muted">今月のお稽古日程と、お社中へのご案内です。</p>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-bottom:5rem;">
+    <div class="card-soft reveal">
+      <h2 class="serif" style="margin-top:0; letter-spacing:0.14em;">今月のお稽古日程</h2>
       <ul>
         <li>水曜クラス：第1・第3水曜日（10:00〜12:00 / 14:00〜16:00）</li>
         <li>木曜クラス：第1・第3木曜日（18:30〜20:30）</li>
         <li>土曜クラス：第2・第4土曜日（10:00〜12:00）</li>
       </ul>
     </div>
-
-    <div class="card">
-      <h2>お社中へのお連絡・お知らせ</h2>
+    <div class="card-soft reveal delay-1">
+      <h2 class="serif" style="margin-top:0; letter-spacing:0.14em;">お社中へのお連絡・お知らせ</h2>
       <p>次回の許状申請・お茶会に関する詳細は、稽古場にて直接お渡しする案内用紙をご確認ください。</p>
     </div>
-
-    <a href="index.html" class="btn-back">← トップページに戻る</a>
+    <a class="btn btn-dark" href="index.html">トップページに戻る</a>
   </div>
 
+  <footer class="site-footer">
+    <div class="mark">久洋会</div>
+    <p>&copy; 京都 表千家 茶道教室 久洋会 All Rights Reserved.</p>
+  </footer>
+  <script src="js/site.js"></script>
 </body>
 </html>

@@ -1,0 +1,632 @@
+:root {
+  --sumi: #1c1814;
+  --ink: #2a241d;
+  --paper: #f6f1e8;
+  --washi: #efe6d6;
+  --matcha: #3d4f3f;
+  --matcha-deep: #2a372c;
+  --gold: #b0894a;
+  --gold-soft: #d4b57a;
+  --bengara: #8d3b2f;
+  --muted: #6d6458;
+  --line: rgba(28, 24, 20, 0.12);
+  --header-h: 76px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+  line-height: 1.85;
+  letter-spacing: 0.04em;
+}
+
+body.nav-open { overflow: hidden; }
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+.serif {
+  font-family: "Shippori Mincho", "Yu Mincho", serif;
+}
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--header-h);
+  padding: 0 7vw;
+  color: #fff;
+  transition: background 0.45s ease, color 0.45s ease, box-shadow 0.45s ease, backdrop-filter 0.45s ease;
+}
+
+.site-header.is-scrolled,
+.site-header.theme-light {
+  color: var(--sumi);
+  background: rgba(246, 241, 232, 0.88);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  gap: 0.1rem;
+}
+
+.logo strong {
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+}
+
+.logo span {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  opacity: 0.78;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.nav a {
+  text-decoration: none;
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  position: relative;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.35s ease;
+}
+
+.nav a:hover::after { width: 100%; }
+
+.nav a.member {
+  border: 1px solid currentColor;
+  padding: 0.35rem 0.8rem;
+}
+
+.nav a.member::after { display: none; }
+
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  z-index: 50;
+}
+
+.nav { z-index: 45; }
+
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after {
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+  position: relative;
+}
+
+.nav-toggle span::before,
+.nav-toggle span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  color: #fff;
+  display: grid;
+  place-items: stretch;
+}
+
+.hero-media,
+.shot img,
+.season-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.08);
+  animation: kenburns 22s ease-in-out infinite alternate;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(20, 16, 12, 0.55) 0%, rgba(20, 16, 12, 0.18) 48%, rgba(20, 16, 12, 0.42) 100%),
+    linear-gradient(180deg, rgba(20, 16, 12, 0.28) 0%, transparent 28%, rgba(20, 16, 12, 0.45) 100%);
+}
+
+.hero .shot-label { z-index: 2; }
+
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: calc(var(--header-h) + 4rem) 7vw 5rem;
+  gap: 2rem;
+}
+
+.hero-en {
+  font-size: 0.75rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.hero-title {
+  margin: 1.2rem 0 0;
+  font-size: clamp(2.4rem, 6vw, 5.2rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.18em;
+}
+
+.hero-lead {
+  max-width: 18rem;
+  margin: 1.4rem 0 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.vertical-catch {
+  writing-mode: vertical-rl;
+  font-family: "Shippori Mincho", serif;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  letter-spacing: 0.45em;
+  height: min(46vh, 380px);
+}
+
+.scroll-hint {
+  position: absolute;
+  z-index: 1;
+  left: 7vw;
+  bottom: 1.6rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+}
+
+.scroll-hint i {
+  display: block;
+  width: 1px;
+  height: 42px;
+  margin-top: 0.6rem;
+  background: currentColor;
+  animation: pulse-line 1.8s ease-in-out infinite;
+}
+
+.wrap {
+  width: min(1120px, calc(100% - 10vw));
+  margin: 0 auto;
+}
+
+.section {
+  padding: 6.5rem 0;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 2.8rem;
+}
+
+.kicker {
+  display: block;
+  color: var(--gold);
+  font-size: 0.72rem;
+  letter-spacing: 0.38em;
+  margin-bottom: 0.6rem;
+}
+
+.section h2,
+.page-hero h1 {
+  margin: 0;
+  font-family: "Shippori Mincho", serif;
+  font-size: clamp(1.8rem, 3.4vw, 2.7rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+.split.reverse { grid-template-columns: 0.95fr 1.05fr; }
+.split.reverse .copy { order: -1; }
+
+.shot {
+  position: relative;
+  overflow: hidden;
+  background: #d7cbb6;
+  min-height: 280px;
+}
+
+.shot.tall { min-height: 520px; }
+.shot.hero-like { min-height: 72vh; }
+
+.shot img {
+  min-height: inherit;
+  transition: transform 1.4s ease;
+}
+
+.shot:hover img { transform: scale(1.05); }
+
+.shot-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.85rem 1rem;
+  background: rgba(28, 24, 20, 0.78);
+  color: #fff;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+}
+
+.shot-label em {
+  display: inline-block;
+  margin-right: 0.55rem;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--gold-soft);
+  color: var(--gold-soft);
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+}
+
+.lede {
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.15rem;
+  line-height: 2.05;
+  margin-top: 0;
+}
+
+.muted { color: var(--muted); }
+
+.profile {
+  margin-top: 2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.profile dt {
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+}
+
+.profile dd {
+  margin: 0.2rem 0 0;
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.15rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.4rem;
+}
+
+.card {
+  background: #fff;
+  padding: 1.8rem 1.5rem 1.6rem;
+  border: 1px solid var(--line);
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(28, 24, 20, 0.08);
+}
+
+.card .num {
+  font-family: "Shippori Mincho", serif;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+}
+
+.card h3 {
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0.7rem 0 0.8rem;
+}
+
+.times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+.time {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.2rem;
+  background: var(--washi);
+  border-left: 2px solid var(--gold);
+}
+
+.seasons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+}
+
+.season-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+}
+
+.season-card img {
+  min-height: 280px;
+  transition: transform 1.2s ease;
+}
+
+.season-card:hover img { transform: scale(1.08); }
+
+.season-card span {
+  position: absolute;
+  inset: auto 0.8rem 0.8rem;
+  color: #fff;
+  font-family: "Shippori Mincho", serif;
+  letter-spacing: 0.22em;
+  text-shadow: 0 8px 18px rgba(0,0,0,0.4);
+}
+
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.news-list a,
+.news-list li > div {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 1.5rem;
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.news-list time {
+  color: var(--gold);
+  font-size: 0.85rem;
+}
+
+.cta-band {
+  background: var(--matcha-deep);
+  color: #f6f1e8;
+}
+
+.cta-band .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14rem;
+  padding: 0.95rem 1.6rem;
+  text-decoration: none;
+  border: 1px solid currentColor;
+  letter-spacing: 0.18em;
+  font-size: 0.82rem;
+  transition: background 0.35s ease, color 0.35s ease, transform 0.35s ease;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn-solid {
+  background: var(--matcha);
+  color: #fff;
+  border-color: var(--matcha);
+}
+
+.btn-solid:hover { background: var(--matcha-deep); }
+
+.btn-ghost {
+  color: #fff;
+}
+
+.btn-ghost:hover {
+  background: #fff;
+  color: var(--sumi);
+}
+
+.btn-dark {
+  color: var(--sumi);
+}
+
+.btn-dark:hover {
+  background: var(--sumi);
+  color: #fff;
+}
+
+.member-panel {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 2.4rem;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.site-footer {
+  padding: 3rem 0 2.2rem;
+  background: var(--sumi);
+  color: #efe6d6;
+  text-align: center;
+}
+
+.site-footer .mark {
+  font-family: "Shippori Mincho", serif;
+  letter-spacing: 0.4em;
+  font-size: 1.1rem;
+}
+
+.site-footer p {
+  margin: 0.8rem 0 0;
+  font-size: 0.78rem;
+  opacity: 0.72;
+}
+
+.page-hero {
+  padding: calc(var(--header-h) + 5rem) 0 3rem;
+}
+
+.article {
+  background: #fff;
+  padding: 2.2rem 2rem;
+  margin-bottom: 1.6rem;
+  border: 1px solid var(--line);
+}
+
+.article .date {
+  color: var(--gold);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+}
+
+.article h2 {
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.45rem;
+  font-weight: 500;
+  margin: 0.4rem 0 1rem;
+}
+
+.article img { margin: 1rem 0; }
+
+.card-soft {
+  background: #fff;
+  padding: 1.8rem;
+  border: 1px solid var(--line);
+  margin-bottom: 1.4rem;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.delay-1 { transition-delay: 0.12s; }
+.delay-2 { transition-delay: 0.24s; }
+.delay-3 { transition-delay: 0.36s; }
+
+@keyframes kenburns {
+  from { transform: scale(1.08) translate3d(0, 0, 0); }
+  to { transform: scale(1.18) translate3d(-2%, -1.5%, 0); }
+}
+
+@keyframes pulse-line {
+  0%, 100% { transform: scaleY(0.35); opacity: 0.35; transform-origin: top; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .nav-toggle { display: grid; place-items: center; }
+
+  .nav {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(28, 24, 20, 0.94);
+    color: #fff;
+    transform: translateX(100%);
+    transition: transform 0.45s ease;
+  }
+
+  body.nav-open .nav { transform: none; }
+  body.nav-open .site-header { color: #fff; }
+
+  .split,
+  .split.reverse,
+  .cards,
+  .times,
+  .seasons,
+  .cta-band .wrap,
+  .member-panel,
+  .news-list a,
+  .news-list li > div {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .split.reverse .copy { order: 0; }
+  .hero-copy { flex-direction: column; align-items: flex-start; }
+  .vertical-catch { height: auto; writing-mode: horizontal-tb; letter-spacing: 0.22em; }
+  .cta-band .wrap { justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}

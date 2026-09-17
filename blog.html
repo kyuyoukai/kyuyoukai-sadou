@@ -1,111 +1,120 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>お稽古ブログ | 表千家流 茶道教室</title>
-    <style>
-        body { font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; margin: 0; padding: 0; background-color: #faf7f3; color: #333; }
-        header { background-color: #2b4b32; color: #fff; text-align: center; padding: 1.5rem 1rem; }
-        h1 { margin: 0; font-size: 1.5rem; letter-spacing: 0.1em; }
-        .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
-        .article { background: #fff; padding: 2rem; margin-bottom: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .date { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
-        h2 { color: #2b4b32; font-size: 1.4rem; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
-        .article img { max-width: 100%; height: auto; border-radius: 4px; margin: 1rem 0; }
-        .btn-back { display: inline-block; background-color: #666; color: #fff; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 4px; margin-top: 1rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お稽古ブログ | 京都 表千家 茶道教室 久洋会</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
+  <header class="site-header theme-light">
+    <a class="logo" href="index.html">
+      <strong>久洋会</strong>
+      <span>京都 表千家 茶道教室</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="メニュー" aria-expanded="false"><span></span></button>
+    <nav class="nav">
+      <a href="index.html#about">ご挨拶</a>
+      <a href="index.html#class">お稽古案内</a>
+      <a href="index.html#news">お知らせ</a>
+      <a href="blog.html">ブログ</a>
+      <a href="index.html#contact">お問合せ</a>
+      <a class="member" href="kaiin.html">会員専用</a>
+    </nav>
+  </header>
 
-    <header>
-        <h1>表千家流 茶道教室</h1>
-        <p style="margin:0.5rem 0 0 0; font-size:0.9rem;">お稽古ブログ・便り</p>
-    </header>
-
-    <div class="container">
-        <div id="blog-list">
-            <p>記事を読み込んでいます...</p>
-        </div>
-
-        <a href="index.html" class="btn-back">トップページに戻る</a>
+  <div class="page-hero">
+    <div class="wrap reveal">
+      <span class="kicker">Journal</span>
+      <h1>お稽古ブログ</h1>
+      <p class="muted">教室の日々と、季節のお茶の便り。</p>
     </div>
+  </div>
 
-    <!-- Markdown変換用ライブラリ -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-        const repoOwner = 'kyuyoukai';
-        const repoName = 'kyuyoukai-sadou';
-        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/blog`;
+  <div class="wrap" style="padding-bottom:5rem;">
+    <figure class="shot reveal" style="margin:0 0 2.4rem;">
+      <img src="https://images.unsplash.com/photo-1578632292335-df3abbb0d586?auto=format&fit=crop&w=1600&q=80" alt="和室の仮写真">
+      <figcaption class="shot-label"><em>仮写真</em>差し替え：ブログ見出し用。稽古場の床の間、または茶会の全景（横位置・広め）</figcaption>
+    </figure>
 
-        fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) throw new Error('API制限または通信エラー');
-                return response.json();
-            })
-            .then(async files => {
-                const blogList = document.getElementById('blog-list');
-                const mdFiles = files.filter(file => file.name.endsWith('.md'));
-                
-                if (mdFiles.length === 0) {
-                    blogList.innerHTML = '<p>まだブログ記事がありません。</p>';
-                    return;
-                }
+    <div id="blog-list">
+      <p class="muted">記事を読み込んでいます...</p>
+    </div>
+    <a class="btn btn-dark" href="index.html">トップページに戻る</a>
+  </div>
 
-                mdFiles.sort((a, b) => b.name.localeCompare(a.name));
+  <footer class="site-footer">
+    <div class="mark">久洋会</div>
+    <p>&copy; 京都 表千家 茶道教室 久洋会 All Rights Reserved.</p>
+  </footer>
 
-                const articlePromises = mdFiles.map(async file => {
-                    const res = await fetch(file.download_url);
-                    const content = await res.text();
-                    
-                    const parts = content.split('---');
-                    if (parts.length >= 3) {
-                        const frontMatter = parts[1];
-                        const bodyMarkdown = parts.slice(2).join('---');
-                        
-                        const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
-                        const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
-                        const thumbMatch = frontMatter.match(/thumbnail:\s*["']?([^"'\n]+)["']?/);
-                        
-                        const title = titleMatch ? titleMatch[1] : '無題';
-                        const date = dateMatch ? dateMatch[1].split('T')[0] : '';
-                        const thumbnail = thumbMatch ? thumbMatch[1].trim() : '';
-                        
-                        let htmlBody = marked.parse(bodyMarkdown);
-                        
-                        // サムネイル画像がある場合は本文の先頭（またはタイトル下）に挿入
-                        let imgHtml = '';
-                        if (thumbnail) {
-                            imgHtml = `<img src="${thumbnail}" alt="${title}">`;
-                        }
-                        
-                        return `
-                            <div class="article">
-                                <div class="date">${date}</div>
-                                <h2>${title}</h2>
-                                ${imgHtml}
-                                <div>${htmlBody}</div>
-                            </div>
-                        `;
-                    }
-                    return '';
-                });
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    const repoOwner = 'kyuyoukai';
+    const repoName = 'kyuyoukai-sadou';
+    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/blog`;
 
-                const articlesHtml = await Promise.all(articlePromises);
-                blogList.innerHTML = articlesHtml.join('') || '<p>記事の表示に失敗しました。</p>';
-            })
-            .catch(err => {
-                console.error(err);
-                // 万が一API制限等で失敗した場合のフォールバック表示
-                document.getElementById('blog-list').innerHTML = `
-                    <div class="article">
-                        <div class="date">2026-09-17</div>
-                        <h2>9月 特別稽古</h2>
-                        <img src="images/uploads/img_6182.jpeg" alt="9月 特別稽古">
-                        <p>且座で花をいけてもらいました。</p>
-                    </div>
-                `;
-            });
-    </script>
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('API制限または通信エラー');
+        return response.json();
+      })
+      .then(async files => {
+        const blogList = document.getElementById('blog-list');
+        const mdFiles = files.filter(file => file.name.endsWith('.md'));
+
+        if (mdFiles.length === 0) {
+          blogList.innerHTML = '<p>まだブログ記事がありません。</p>';
+          return;
+        }
+
+        mdFiles.sort((a, b) => b.name.localeCompare(a.name));
+
+        const articlePromises = mdFiles.map(async file => {
+          const res = await fetch(file.download_url);
+          const content = await res.text();
+          const parts = content.split('---');
+          if (parts.length >= 3) {
+            const frontMatter = parts[1];
+            const bodyMarkdown = parts.slice(2).join('---');
+            const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
+            const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
+            const thumbMatch = frontMatter.match(/thumbnail:\s*["']?([^"'\n]+)["']?/);
+            const title = titleMatch ? titleMatch[1] : '無題';
+            const date = dateMatch ? dateMatch[1].split('T')[0] : '';
+            const thumbnail = thumbMatch ? thumbMatch[1].trim() : '';
+            const htmlBody = marked.parse(bodyMarkdown);
+            const imgHtml = thumbnail ? `<img src="${thumbnail}" alt="${title}">` : '';
+            return `
+              <article class="article reveal is-visible">
+                <div class="date">${date}</div>
+                <h2>${title}</h2>
+                ${imgHtml}
+                <div>${htmlBody}</div>
+              </article>
+            `;
+          }
+          return '';
+        });
+
+        const articlesHtml = await Promise.all(articlePromises);
+        blogList.innerHTML = articlesHtml.join('') || '<p>記事の表示に失敗しました。</p>';
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('blog-list').innerHTML = `
+          <article class="article">
+            <div class="date">2026-09-17</div>
+            <h2>9月 特別稽古</h2>
+            <img src="images/uploads/img_6182.jpeg" alt="9月 特別稽古">
+            <p>且座で花をいけてもらいました。</p>
+          </article>
+        `;
+      });
+  </script>
 </body>
 </html>
