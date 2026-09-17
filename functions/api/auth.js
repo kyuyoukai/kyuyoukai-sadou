@@ -4,12 +4,19 @@ export async function onRequestGet(context) {
     const url = new URL(request.url);
     const code = url.searchParams.get("code");
 
-    // テスト用のハードコード（必要に応じて維持）
-    const clientId = "Ov23liKW8oXeJWBOQ4wG";
-    const clientSecret = "62a6334dd828ef937fc81a58500c3100561431e1";
+    const clientId = env.GITHUB_CLIENT_ID;
+    const clientSecret = env.GITHUB_CLIENT_SECRET;
+    const redirectUri = `${url.origin}/api/auth`;
+
+    if (!clientId || !clientSecret) {
+      return new Response("Authentication is not configured.", { status: 500 });
+    }
 
     if (!code) {
-      return Response.redirect(`https://github.com/login/oauth/authorize?client_id=${clientId}`, 302);
+      const authorizeUrl = new URL("https://github.com/login/oauth/authorize");
+      authorizeUrl.searchParams.set("client_id", clientId);
+      authorizeUrl.searchParams.set("redirect_uri", redirectUri);
+      return Response.redirect(authorizeUrl, 302);
     }
 
     // GitHubへアクセストークンを要求する
@@ -24,6 +31,7 @@ export async function onRequestGet(context) {
         client_id: clientId,
         client_secret: clientSecret,
         code: code,
+        redirect_uri: redirectUri,
       }),
     });
 
@@ -45,13 +53,19 @@ export async function onRequestGet(context) {
       return new Response("Error: No access token found in response.", { status: 500 });
     }
 
+    const tokenJson = JSON.stringify(accessToken);
     const html = `
       <!doctype html>
       <html>
       <body>
         <script>
-          const token = "${accessToken}";
-          window.opener.postMessage('authorization:github:success:' + JSON.stringify({ token: token, provider: "github" }), "*");
+          const token = ${tokenJson};
+          if (window.opener) {
+            window.opener.postMessage(
+              'authorization:github:success:' + JSON.stringify({ token: token, provider: "github" }),
+              ${JSON.stringify(url.origin)}
+            );
+          }
           window.close();
         </script>
         <p>認証に成功しました。ウィンドウを閉じます...</p>
