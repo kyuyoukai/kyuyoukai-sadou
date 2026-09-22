@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会員専用ページ | 京都 表千家 茶道教室 久洋会</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css?v=20260920-card-layout">
+</head>
+<body>
+  <script>
+    var pass = prompt("会員専用パスワードを入力してください：");
+    if (pass !== "sadou123") {
+      alert("パスワードが正しくありません。");
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <header class="site-header theme-light">
+    <a class="logo" href="index.html">
+      <strong>久洋会</strong>
+      <span>京都 表千家 茶道教室</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="メニュー" aria-expanded="false"><span></span></button>
+    <nav class="nav">
+      <a href="index.html#about">ご挨拶</a>
+      <a href="index.html#class">お稽古案内</a>
+      <a href="blog.html">ブログ</a>
+      <a href="index.html#contact">お問合せ</a>
+      <a class="member" href="kaiin.html">会員専用</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <div class="wrap reveal">
+      <span class="kicker">Members</span>
+      <h1>会員専用エリア</h1>
+      <p class="muted">今月の稽古日程と、通常稽古・特別稽古のご案内です。</p>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-bottom:5rem;">
+    <section class="schedule-overview reveal" aria-labelledby="schedule-title">
+      <div class="calendar-heading">
+        <div>
+          <span class="kicker">Schedule</span>
+          <h2 id="schedule-title">2026年10月のお稽古</h2>
+        </div>
+        <span class="calendar-count" id="regular-selection-count">通常稽古は0 / 3日選択</span>
+      </div>
+      <div class="month-tabs" role="tablist" aria-label="稽古月の選択">
+        <button class="month-tab is-active" type="button" data-month="10" role="tab" aria-selected="true">10月</button>
+        <button class="month-tab" type="button" data-month="11" role="tab" aria-selected="false">11月</button>
+        <button class="month-tab" type="button" data-month="12" role="tab" aria-selected="false">12月</button>
+      </div>
+    </section>
+
+    <div class="schedule-columns">
+      <section class="schedule-panel reveal delay-1" aria-labelledby="sunday-title">
+        <span class="schedule-label regular-label">通常稽古</span>
+        <div class="schedule-title-row">
+          <h2 id="sunday-title" class="serif">日曜日の稽古日</h2>
+          <span class="schedule-time">18:30から</span>
+        </div>
+        <div class="schedule-options" id="sunday-options"></div>
+      </section>
+
+      <section class="schedule-panel reveal delay-1" aria-labelledby="thursday-title">
+        <span class="schedule-label regular-label">通常稽古</span>
+        <div class="schedule-title-row">
+          <h2 id="thursday-title" class="serif">木曜日の稽古日</h2>
+          <span class="schedule-time">10:00から</span>
+        </div>
+        <div class="schedule-options" id="thursday-options"></div>
+      </section>
+
+      <section class="schedule-panel special-panel reveal delay-2" aria-labelledby="special-title">
+        <span class="schedule-label special-label">特別稽古</span>
+        <p>相伝物のお稽古です。受講には「習事」以上の免状が必要です。</p>
+        <div class="schedule-options" id="special-options"></div>
+        <p class="muted license-order">免状：入門 → 習事 → 飾物 → 茶通箱 → 唐物 → 台天目 → 盆点</p>
+      </section>
+    </div>
+
+    <div class="card-soft reveal delay-3">
+      <h2 class="serif" style="margin-top:0; letter-spacing:0.14em;">予約について</h2>
+      <button class="btn btn-solid" type="button" disabled>予約内容を送信（準備中）</button>
+    </div>
+    <a class="btn btn-dark" href="index.html">トップページに戻る</a>
+  </div>
+
+  <footer class="site-footer">
+    <div class="mark">久洋会</div>
+    <p>&copy; 京都 表千家 茶道教室 久洋会 All Rights Reserved.</p>
+  </footer>
+  <script src="js/site.js"></script>
+  <script>
+    (function () {
+      var schedules = {
+        "10": {
+          sunday: ["4", "11", "25"],
+          thursday: ["1", "15", "29"],
+          special: [["4", "日", "13:30"], ["27", "火", "9:00"]]
+        },
+        "11": {
+          sunday: ["8", "22", "29"],
+          thursday: ["12", "26"],
+          special: [["8", "日", "13:30"], ["24", "火", "9:00"]]
+        },
+        "12": {
+          sunday: ["6", "13", "20"],
+          thursday: ["3", "17", "24"],
+          special: [["13", "日", "13:30"], ["15", "火", "9:00"]]
+        }
+      };
+      var monthNames = { "10": "10月", "11": "11月", "12": "12月" };
+      var currentMonth = "10";
+      var count = document.getElementById("regular-selection-count");
+
+      function regularLabel(day, weekday, time) {
+        return '<label><input class="regular-choice" type="checkbox"> 2026年' + monthNames[currentMonth] + day + '日（' + weekday + '） ' + time + '〜</label>';
+      }
+
+      function renderSchedule(month) {
+        currentMonth = month;
+        var schedule = schedules[month];
+        document.getElementById("schedule-title").textContent = "2026年" + monthNames[month] + "のお稽古";
+        document.getElementById("sunday-options").innerHTML = schedule.sunday.map(function (day) {
+          return regularLabel(day, "日", "18:30");
+        }).join("");
+        document.getElementById("thursday-options").innerHTML = schedule.thursday.map(function (day) {
+          return regularLabel(day, "木", "10:00");
+        }).join("");
+        document.getElementById("special-options").innerHTML = schedule.special.map(function (item) {
+          return '<label><input class="special-choice" type="checkbox"> 2026年' + monthNames[month] + item[0] + '日（' + item[1] + '） ' + item[2] + '〜</label>';
+        }).join("");
+        count.textContent = "通常稽古は0 / 3日選択";
+        bindChoices();
+      }
+
+      function bindChoices() {
+        var choices = Array.prototype.slice.call(document.querySelectorAll(".regular-choice"));
+        choices.forEach(function (choice) {
+          choice.addEventListener("change", function () {
+            var selected = choices.filter(function (item) { return item.checked; });
+            if (selected.length > 3) choice.checked = false;
+            count.textContent = "通常稽古は" + choices.filter(function (item) { return item.checked; }).length + " / 3日選択";
+          });
+        });
+
+        var specialChoices = Array.prototype.slice.call(document.querySelectorAll(".special-choice"));
+        specialChoices.forEach(function (choice) {
+          choice.addEventListener("change", function () {
+            if (!choice.checked) return;
+            specialChoices.forEach(function (item) {
+              if (item !== choice) item.checked = false;
+            });
+          });
+        });
+      }
+
+      document.querySelectorAll(".month-tab").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          document.querySelectorAll(".month-tab").forEach(function (item) {
+            item.classList.remove("is-active");
+            item.setAttribute("aria-selected", "false");
+          });
+          tab.classList.add("is-active");
+          tab.setAttribute("aria-selected", "true");
+          renderSchedule(tab.dataset.month);
+        });
+      });
+
+      renderSchedule(currentMonth);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お稽古ブログ | 京都 表千家 茶道教室 久洋会</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <header class="site-header theme-light">
+    <a class="logo" href="index.html">
+      <strong>久洋会</strong>
+      <span>京都 表千家 茶道教室</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="メニュー" aria-expanded="false"><span></span></button>
+    <nav class="nav">
+      <a href="index.html#about">ご挨拶</a>
+      <a href="index.html#class">お稽古案内</a>
+      <a href="index.html#news">お知らせ</a>
+      <a href="blog.html">ブログ</a>
+      <a href="index.html#contact">お問合せ</a>
+      <a class="member" href="kaiin.html">会員専用</a>
+    </nav>
+  </header>
+
+  <div class="page-hero">
+    <div class="wrap reveal">
+      <span class="kicker">Journal</span>
+      <h1>お稽古ブログ</h1>
+      <p class="muted">教室の日々と、季節のお茶の便り。</p>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-bottom:5rem;">
+    <figure class="shot reveal" style="margin:0 0 2.4rem;">
+      <img src="https://images.unsplash.com/photo-1578632292335-df3abbb0d586?auto=format&fit=crop&w=2000&q=92" alt="和室の仮写真">
+      <figcaption class="shot-label"><em>仮写真</em>差し替え：ブログ見出し用。稽古場の床の間、または茶会の全景（横位置・広め）</figcaption>
+    </figure>
+
+    <div id="blog-list">
+      <p class="muted">記事を読み込んでいます...</p>
+    </div>
+    <a class="btn btn-dark" href="index.html">トップページに戻る</a>
+  </div>
+
+  <footer class="site-footer">
+    <div class="mark">久洋会</div>
+    <p>&copy; 京都 表千家 茶道教室 久洋会 All Rights Reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="js/site.js"></script>
+  <script>
+    const repoOwner = 'kyuyoukai';
+    const repoName = 'kyuyoukai-sadou';
+    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/blog`;
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('API制限または通信エラー');
+        return response.json();
+      })
+      .then(async files => {
+        const blogList = document.getElementById('blog-list');
+        const mdFiles = files.filter(file => file.name.endsWith('.md'));
+
+        if (mdFiles.length === 0) {
+          blogList.innerHTML = '<p>まだブログ記事がありません。</p>';
+          return;
+        }
+
+        mdFiles.sort((a, b) => b.name.localeCompare(a.name));
+
+        const articlePromises = mdFiles.map(async file => {
+          const res = await fetch(file.download_url);
+          const content = await res.text();
+          const parts = content.split('---');
+          if (parts.length >= 3) {
+            const frontMatter = parts[1];
+            const bodyMarkdown = parts.slice(2).join('---');
+            const titleMatch = frontMatter.match(/title:\s*["']?([^"'\n]+)["']?/);
+            const dateMatch = frontMatter.match(/date:\s*["']?([^"'\n]+)["']?/);
+            const thumbMatch = frontMatter.match(/thumbnail:\s*["']?([^"'\n]+)["']?/);
+            const title = titleMatch ? titleMatch[1] : '無題';
+            const date = dateMatch ? dateMatch[1].split('T')[0] : '';
+            const thumbnail = thumbMatch ? thumbMatch[1].trim() : '';
+            const htmlBody = marked.parse(bodyMarkdown);
+            const imgHtml = thumbnail ? `<img src="${thumbnail}" alt="${title}">` : '';
+            return `
+              <article class="article reveal is-visible">
+                <div class="date">${date}</div>
+                <h2>${title}</h2>
+                ${imgHtml}
+                <div>${htmlBody}</div>
+              </article>
+            `;
+          }
+          return '';
+        });
+
+        const articlesHtml = await Promise.all(articlePromises);
+        blogList.innerHTML = articlesHtml.join('') || '<p>記事の表示に失敗しました。</p>';
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('blog-list').innerHTML = `
+          <article class="article">
+            <div class="date">2026-09-17</div>
+            <h2>9月 特別稽古</h2>
+            <img src="images/uploads/img_6182.jpeg" alt="9月 特別稽古">
+            <p>且座で花をいけてもらいました。</p>
+          </article>
+        `;
+      });
+  </script>
+</body>
+</html>

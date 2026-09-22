@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" preserveAspectRatio="xMidYMid slice">
+  <rect width="900" height="1200" fill="#cfc3a8"/>
+  <rect x="70" y="80" width="760" height="1040" fill="none" stroke="#2a372c" stroke-width="2" opacity="0.35"/>
+  <rect x="160" y="220" width="580" height="720" fill="#8ea084"/>
+  <rect x="200" y="270" width="500" height="620" fill="#dfe6d4"/>
+  <path d="M250 820 C340 640 560 640 650 820" fill="none" stroke="#2a372c" stroke-width="8"/>
+  <circle cx="450" cy="520" r="70" fill="#3d4f3f"/>
+  <text x="450" y="1120" text-anchor="middle" fill="#2a241d" font-size="26" font-family="serif">�\=�4n�~_o20��</text>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice">
+  <rect width="800" height="1000" fill="#c45b32"/>
+  <circle cx="280" cy="360" r="70" fill="#e8a14b"/>
+  <circle cx="500" cy="430" r="90" fill="#8d2b1c"/>
+  <circle cx="390" cy="560" r="60" fill="#f0c56e"/>
+  <text x="400" y="820" text-anchor="middle" fill="#fff8ea" font-size="48" font-family="serif">�</text>
+  <text x="400" y="900" text-anchor="middle" fill="#fff8ea" font-size="22" font-family="serif">�\���I</text>
+</svg>

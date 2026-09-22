@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice">
+  <rect width="800" height="1000" fill="#f3d5d8"/>
+  <circle cx="400" cy="420" r="90" fill="#f7f1f2"/>
+  <circle cx="300" cy="520" r="50" fill="#e9b7c0"/>
+  <circle cx="500" cy="540" r="40" fill="#d98a96"/>
+  <text x="400" y="820" text-anchor="middle" fill="#5b3036" font-size="48" font-family="serif">%</text>
+  <text x="400" y="900" text-anchor="middle" fill="#5b3036" font-size="22" font-family="serif">�\%n�e</text>
+</svg>
